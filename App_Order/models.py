@@ -35,3 +35,7 @@ class Order(models.Model):
         for order_item in self.orderitems.all():
             total += float(order_item.get_total())
         return total
+
+
+# class Coupon(models.Model):
+#     coupon_code = models.CharField(max_length=264, blank=True)

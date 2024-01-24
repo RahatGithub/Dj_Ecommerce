@@ -20,6 +20,11 @@
               <span class="currency">BDT &#2547;</span><span class="num">{{object.price}}</span>
             </span>
           </p>
+          {% if product.seller %}
+            <p class="bg-warning text-center">Seller: <b>{{product.seller}}</b></p>
+            {% else %}
+            <p class="bg-info text-center text-white">Own product</p>
+            {% endif %}
           <dl class="item-property">
             <dt>Description</dt>
             <dd>

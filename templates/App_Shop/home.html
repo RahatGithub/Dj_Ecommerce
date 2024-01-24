@@ -13,6 +13,11 @@
         <figcaption class="info-wrap">
           <h6 class="title"><a href="{% url 'App_Shop:product_detail' pk=product.pk %}">{{product.name}}</a></h6>
           <div class="action-wrap">
+            {% if product.seller %}
+              <p class="bg-warning text-center">{{product.seller}}</p>
+            {% else %}
+              <p class="bg-info text-center text-white">Own product</p>
+            {% endif %}
             <div class="price-wrap h5">
               <span class="price-new">&#2547; {{product.price|floatformat:2}}</span>
               <span class="price-old"><strike>&#2547; {{product.old_price|floatformat:2}}</strike></span>
