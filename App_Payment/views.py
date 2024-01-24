@@ -11,7 +11,8 @@ from django.contrib.auth.decorators import login_required
 
 # for payment
 import requests
-from sslcommerz_python.payment import SSLCSession
+# from sslcommerz_lib.payment import SSLCSession  ***PREVIOUS***
+from sslcommerz_lib import SSLCOMMERZ # ***NEW***
 from decimal import Decimal
 import socket
 from django.views.decorators.csrf import csrf_exempt
@@ -50,7 +51,9 @@ def payment(request):
 
     store_id = 'none5e026730bdf7f'
     API_key = 'none5e026730bdf7f@ssl'
-    mypayment = SSLCSession(sslc_is_sandbox=True, sslc_store_id=store_id, sslc_store_pass=API_key)
+    # mypayment = SSLCSession(sslc_is_sandbox=True, sslc_store_id=store_id, sslc_store_pass=API_key)  ***PREVIOUS***
+    settings = { 'store_id': store_id, 'store_pass': API_key, 'issandbox': True }   # ***NEW***
+    mypayment = SSLCOMMERZ(settings)      # ***NEW***
 
     status_url = request.build_absolute_uri(reverse("App_Payment:complete"))
     #print(status_url)
@@ -111,5 +114,5 @@ def order_view(request):
         context = {"orders": orders}
     except:
         messages.warning(request, "You do no have an active order")
-        return redired("App_Shop:home")
+        return redirect("App_Shop:home")
     return render(request, "App_Payment/order.html", context)

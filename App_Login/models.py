@@ -3,7 +3,7 @@ from django.db import models
 # To Create a Custom User Model and Admin Panel
 
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
-from django.utils.translation import ugettext_lazy
+from django.utils.translation import gettext_lazy
 
 # To automatically create one to one objects
 
@@ -37,18 +37,20 @@ class MyUserManager(BaseUserManager):
             raise ValueError('Superuser must have is_superuser=True')
         return self._create_user(email, password, **extra_fields)
 
+
+
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True, null=False)
     is_staff = models.BooleanField(
-        ugettext_lazy('staff status'),
+        gettext_lazy('staff status'),
         default=False,
-        help_text = ugettext_lazy('Designates whether the user can log in this site')
+        help_text = gettext_lazy('Designates whether the user can log in this site')
     )
 
     is_active = models.BooleanField(
-        ugettext_lazy('active'),
+        gettext_lazy('active'),
         default=True,
-        help_text=ugettext_lazy('Designates whether this user should be treated as active. Unselect this instead of deleting accounts')
+        help_text=gettext_lazy('Designates whether this user should be treated as active. Unselect this instead of deleting accounts')
     )
 
     USERNAME_FIELD = 'email'
@@ -62,6 +64,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return self.email
+
+
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
