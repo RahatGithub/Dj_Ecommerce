@@ -4,10 +4,37 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 
 # Model
-from App_Order.models import Cart, Order
+from App_Order.models import Cart, Order, Coupon
 from App_Shop.models import Product
 # Messages
 from django.contrib import messages
+# Forms 
+from App_Order.forms import CouponForm
+
+
+@login_required
+def cart_view(request):
+    carts = Cart.objects.filter(user=request.user, purchased=False)
+    orders = Order.objects.filter(user=request.user, ordered=False)
+
+    if carts.exists() and orders.exists():
+        order = orders[0]
+        total = order.get_totals(0)
+        discount=0
+        # Handling apply coupon code
+        form = CouponForm()
+        if request.method == 'POST':
+            form = CouponForm(request.POST)
+            if form.is_valid():
+                couponCode = form.cleaned_data['couponCode']
+                if Coupon.objects.filter(coupon_code=couponCode).exists():
+                    coupon = Coupon.objects.get(coupon_code=couponCode)
+                    discount = coupon.discount_amount 
+                    total = order.get_totals(discount)
+        return render(request, 'App_Order/cart.html', context={'carts':carts, 'order':order, 'total':total, 'form':form, 'discount':discount})
+    else:
+        messages.warning(request, "You don't have any item in your cart!")
+        return redirect("App_Shop:home")
 
 
 @login_required
@@ -33,17 +60,6 @@ def add_to_cart(request, pk):
         messages.info(request, "This item was added to your cart.")
         return redirect("App_Shop:home")
 
-
-@login_required
-def cart_view(request):
-    carts = Cart.objects.filter(user=request.user, purchased=False)
-    orders = Order.objects.filter(user=request.user, ordered=False)
-    if carts.exists() and orders.exists():
-        order = orders[0]
-        return render(request, 'App_Order/cart.html', context={'carts':carts, 'order':order})
-    else:
-        messages.warning(request, "You don't have any item in your cart!")
-        return redirect("App_Shop:home")
 
 
 @login_required
@@ -110,3 +126,9 @@ def decrease_cart(request, pk):
     else:
         messages.info(request, "You don't have an active order")
         return redirect("App_Shop:home")
+
+
+
+@login_required
+def apply_coupon(request, pk):
+    pass

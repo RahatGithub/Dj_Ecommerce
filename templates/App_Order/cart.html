@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% block body_block %}
 <div class="container my-5">
   <div class="my-5">
@@ -28,13 +29,24 @@
         <td><a href="{% url 'App_Order:remove' pk=cart.item.pk %}" class="btn btn-danger btn-sm">Remove From Cart</a></td>
       </tr>
       {% endfor %}
-      
+
       <tr>
         <th scope="row"></th>
         <td colspan="2">Total</td>
-        <td align="right">&#2547; {{order.get_totals | floatformat:2 }}</td>
-        <td></td>
+        <td align="right">&#2547; {{total | floatformat:2 }} <span class="text-primary">(Discount: &#2547;{{discount}})</span></td>
       </tr>
+
+      <tr>
+        <td colspan="2"></td>
+        <td colspan="2">
+          <form method="POST">
+            {{form|crispy}}
+            <button type="submit" class="btn btn-dark">Apply</button>
+            {% csrf_token %}
+          </form>
+        </td>
+      <tr>
+
       <tr>
         <th scope="row"></th>
         <td colspan="4" class="text-right">

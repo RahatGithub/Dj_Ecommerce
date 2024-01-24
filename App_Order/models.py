@@ -30,12 +30,17 @@ class Order(models.Model):
     paymentId = models.CharField(max_length=264, blank=True, null=True)
     orderId = models.CharField(max_length=200, blank=True, null=True)
 
-    def get_totals(self):
+    def get_totals(self, discount):
         total = 0
         for order_item in self.orderitems.all():
-            total += float(order_item.get_total())
+            total += float(order_item.get_total()) 
+        total -= discount
         return total
 
 
-# class Coupon(models.Model):
-#     coupon_code = models.CharField(max_length=264, blank=True)
+class Coupon(models.Model):
+    coupon_code = models.CharField(max_length=264, blank=True)
+    discount_amount = models.IntegerField(blank=True)
+
+    def __str__(self):
+        return self.coupon_code

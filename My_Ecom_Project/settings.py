@@ -28,11 +28,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crispy_forms',
+    'crispy_bootstrap4',
     'App_Login',
     'App_Shop',
     'App_Order',
     'App_Payment',
-    'bootstrap4'
+    # 'bootstrap4',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -48,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'crispy_forms.middleware.CrispyMiddleware',
 ]
 
 ROOT_URLCONF = 'My_Ecom_Project.urls'
